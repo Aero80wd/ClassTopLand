@@ -1,29 +1,27 @@
 <p align="center">
-  <img width="18%" alt="icon" src="https://github.com/user-attachments/assets/3a87e9c8-4283-454f-ba54-fc5c26ea3966">
+  <img width="18%" alt="icon" src="https://cdn.luogu.com.cn/upload/image_hosting/cq2imakn.png">
 
 </p>
   <h1 align="center">
-  校园悬浮窗
+  ClassTopLand
 </h1>
 <p align="center">
-  基于Qt6 Widgets的校园桌面悬浮窗组件
+  基于Qt6 Widgets的校园桌面课程显示组件
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/PyQt-Fluent-Widgets" target="_blank">
     <img src="https://img.shields.io/badge/Version-v5.4-2334D05" alt="Version">
-  </a>
 
   <a style="text-decoration:none" href="/LICENSE">
     <img src="https://img.shields.io/badge/License-GPLv2-blue?color=#4ec820" alt="GPLv2"/>
   </a>
 
-  <a style="text-decoration:none" href="https://github.com/Aero80wd/SchoolTools/releases">
+  <a style="text-decoration:none" href="https://github.com/Aero80wd/ClassTopLand/releases">
     <img src="https://img.shields.io/badge/Platform-Windows_Only-blue?color=#4ec820" alt="Platform Win32 | Linux | macOS"/>
   </a>
 </p>
 
-<img src="https://github.com/user-attachments/assets/4459366e-60b9-4606-845d-a731f9c6c91c" alt="example">
+<img src="https://disk.aero8m.cloud/p/共享图床/classtopland.png" alt="example">
 
 
 
@@ -44,6 +42,13 @@
 > **注意**
 > 如运行出现缺失DLL，请下载安装[VS2019运行库](https://aka.ms/vs/17/release/vc_redist.x64.exe)。
 ## 更新日志
+### [6.0] - 2025-1-12 
+Happy New Year!
+大大大大大大大更新
+- 将软件名改为ClassTopLand并更改图标
+- 修复倒计时位置bug
+- 大量修改设置ui
+- 增加希沃对抗功能，防止希沃置顶（使用了曲柄检测，对希沃只隐藏窗口可用）
 ### [v5.4] - 2024-11-24
 - 将隐藏窗口箭头改为色块
 - 修复倒计时隐藏bug
