@@ -47,6 +47,18 @@ public:
     QDateTime getTodayTime(QString str);
 
     void run();
+    bool canShow(QString text) {
+        QFont ft("Microsoft YaHei UI",18);// 获取当前字体的格式，里面有文本大小和文本像素大小
+        QFontMetrics fm(ft); // 以当前的字体格式为基础
+        int text_wpixel = fm.horizontalAdvance(text); //以当前的字体格式为基础,计算字体的像素宽度
+        qDebug() << "text_wpixel:" << text_wpixel << "getWidth():" << getWidth() << "getWidth() - 60:" << getWidth() - 60;
+        if (text_wpixel > emit getWidth() - 60) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 signals:
     void setTable(QString str);
     void repaint();
@@ -58,6 +70,7 @@ signals:
     void toDone();
     void initMainWindowAnimation();
     void windowTop();
+    int getWidth();
 private:
     bool WhetherProcessRunning(QString& processName);
 };
@@ -112,7 +125,9 @@ public slots:
     void on_startTimer(QString timer_str);
     void on_stopTimer();
     void on_timerisStart(bool &st);
-
+    int on_getWidth() {
+        return width();
+    };
 private slots:
     void on_label_clicked();
     void on_showMainAction();

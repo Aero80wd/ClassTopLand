@@ -80,7 +80,6 @@ TableEditWidget::TableEditWidget(QWidget *parent)
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->installEventFilter(this);
     ui->label_4->setText("Version " + APP_VERSION);
-    connect(ui->checkUpdate, &QPushButton::clicked, this, &TableEditWidget::_startUpdateTool);
     connect(ui->tableWidget, &QTableWidget::cellChanged, this, &TableEditWidget::on_cellChanged);
 }
 
@@ -147,7 +146,7 @@ void TableEditWidget::showEvent(QShowEvent* event){
     toggleded();
 }
 void TableEditWidget::closeEvent(QCloseEvent *event){
-    QApplication::setQuitOnLastWindowClosed( true );
+    QApplication::setQuitOnLastWindowClosed(false);
     emit refechTable_signal();
     this->hide();
     event->ignore();
@@ -285,7 +284,6 @@ void TableEditWidget::addItem(QString key){
     insert_json.insert("name",ui->lineEdit->text());
     insert_json.insert("start",ui->timeEdit->text());
     insert_json.insert("end",ui->timeEdit_2->text());
-    insert_json.insert("split",ui->spinBox->value());
     QJsonArray editarray;
     if (m_bIsEditAppendixTable){
         editarray = m_joTimeTable["appendixTables"][key].toArray();

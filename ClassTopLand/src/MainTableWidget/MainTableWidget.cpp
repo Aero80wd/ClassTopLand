@@ -231,6 +231,7 @@ void MainTableWidget::initSignal(){
     connect(rtt, &refechTableThread::windowTop, this, [=] {
         SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     }, Qt::QueuedConnection);
+    connect(rtt, &refechTableThread::getWidth, this,&MainTableWidget::on_getWidth, Qt::BlockingQueuedConnection);
 
 }
 void MainTableWidget::readTimeTable(){
@@ -330,11 +331,11 @@ void refechTableThread::run(){
     emit changeStackedIndex(1);
 
     emit initMainWindowAnimation();
-
-    for(int x = 0;x < today_table.count();)
+    QJsonObject null_class = { {"start","00:00"},{"end","00:00"} };
+    for(int idx = 0;idx < today_table.count();)
     {
 
-        QStringList topprocess = { "希沃白板","PowerP"};
+        QStringList topprocess = { "希沃白板"};
         for (QString process : topprocess) {
             if (WhetherProcessRunning(process)) {
                 emit windowTop();
@@ -343,70 +344,88 @@ void refechTableThread::run(){
         
         
         QDateTime current_date_time = QDateTime::currentDateTime();
-        QDateTime class_start_time = getTodayTime(today_table[x].toObject().value("start").toString());
-
-        QDateTime class_end_time = getTodayTime(today_table[x].toObject().value("end").toString());
-
-
-        // qDebug() << getTodayTime(today_table[x-1].toObject().value("end").toString()).secsTo(getTodayTime(today_table[x].toObject().value("start").toString()));
-
-        if (current_date_time.secsTo(class_start_time) <= 0 and current_date_time.secsTo(class_end_time) <= 0){
-            shangkelema = true;
-            emit setClassStyleSheet(x,"");
-            if (x+1 != today_table.count())
-            {
-                emit setClassStyleSheet(x+1,"border-width: 0px 0px 4px 0px; border-color:#1191d3; border-style: solid;");
-            }
-
-            emit showStatusMessage("下课时间到");
-            x++;
-            continue;
-        }else if(current_date_time.secsTo(class_start_time) <= 0 and current_date_time.secsTo(class_start_time) <= 0){
-
-            int diff_time = current_date_time.secsTo(class_end_time);
-            if (!shangkelema)
-            {
-                if (x>0)
-                {
-                    emit setClassStyleSheet(x-1,"");
-                }
-                emit setClassStyleSheet(x,"border-width: 0px 0px 4px 0px; border-color:#1191d3; border-style: solid;");
-                emit showStatusMessage("上课时间到");
+        QJsonObject current_class = today_table[idx].toObject();
+        QJsonObject prev_class = idx > 0 ? today_table[idx - 1].toObject() : null_class;
+        QJsonObject next_class = idx < today_table.count() - 1 ? today_table[idx + 1].toObject() : null_class;
+        QDateTime current_class_start_time = getTodayTime(current_class.value("start").toString());
+        QDateTime current_class_end_time = getTodayTime(current_class.value("end").toString());
+        QDateTime prev_class_start_time = getTodayTime(prev_class.value("start").toString());
+        QDateTime prev_class_end_time = getTodayTime(prev_class.value("end").toString());
+        QDateTime next_class_start_time = getTodayTime(next_class.value("start").toString());
+        QDateTime next_class_end_time = getTodayTime(next_class.value("end").toString());
+        if (current_date_time.secsTo(current_class_end_time)> 0) { // 当前时间 - 当前课程下课时间 >= 0 (上课中)
+            if (idx > 0) emit setClassStyleSheet(idx - 1, ""); //去除上一节课的边框
+            emit setClassStyleSheet(idx, "border-width: 0px 0px 4px 0px; border-color:#1191d3; border-style: solid;");
+            if (current_date_time.secsTo(current_class_start_time) == 0 and !shangkelema) {  // 当前时间 - 当前课程开始时间 == 0 (刚开始上课)
                 shangkelema = true;
-            }
-            int  hour = diff_time / 3600;
-            diff_time = diff_time % 3600;
-            int min = diff_time / 60;
-            int sec = diff_time % 60;
-            display_string = QString("%1:%2:%3").arg(hour, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')).arg(sec, 2, 10, QLatin1Char('0'));
-            emit tst(display_string);
-            Sleep(1000);
-        }else if(getTodayTime(today_table[x-1].toObject().value("end").toString()).secsTo(getTodayTime(today_table[x].toObject().value("start").toString())) <= today_table[x-1].toObject().value("split").toInt() * 60 and
-                   x != 0){
-
-            QDateTime current_date_time = QDateTime::currentDateTime();
-            int diff_time = current_date_time.secsTo(getTodayTime(today_table[x].toObject().value("start").toString()));
-            if (shangkelema)
-            {
-                if (x>0)
-                {
-                    emit setClassStyleSheet(x-1,"");
+                if (canShow(QString("%1 已经上课，请做好上课准备").arg(current_class["name"].toString()))) {
+                    emit showStatusMessage(QString("%1 已经上课，请做好上课准备").arg(current_class["name"].toString()));
                 }
-                emit setClassStyleSheet(x,"border-width: 0px 0px 4px 0px; border-color:rgb(0,226,142); border-style: solid;");
-                shangkelema = false;
+                else if (canShow(QString("%1 已上课").arg(current_class["name"].toString()))) {
+                    emit showStatusMessage(QString("%1 已上课").arg(current_class["name"].toString()));
+                }
+                else {
+                    emit showStatusMessage(QString("上课时间到"));
+                }
+                
             }
-            int  hour = diff_time / 3600;
-            diff_time = diff_time % 3600;
-            int min = diff_time / 60;
-            int sec = diff_time % 60;
-            display_string = QString("%1:%2:%3").arg(hour, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')).arg(sec, 2, 10, QLatin1Char('0'));
-            emit tst(display_string);
-            Sleep(1000);
-                   }else{
-
-                       x++;
-                       continue;
-                   }
+            else {
+                int diff_time = current_date_time.secsTo(current_class_end_time);
+                int hour = diff_time / 3600;
+                diff_time = diff_time % 3600;
+                int min = diff_time / 60;
+                int sec = diff_time % 60;
+                QString display_string = QString("%1:%2:%3").arg(hour, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')).arg(sec, 2, 10, QLatin1Char('0'));
+                emit tst(display_string);
+                Sleep(50);
+            }
+        }
+        else if (current_date_time.secsTo(current_class_end_time) <= 0) { // 当前时间 - 当前课程下课时间 <= 0 (下课 or 不是这节课)
+            if (current_date_time.secsTo(next_class_start_time)> 0) { // 当前时间 - 下一节课开始时间 >= 0 (就是这节课，且正在下课时间)
+                emit setClassStyleSheet(idx, ""); //去除上一节课的边框
+                emit setClassStyleSheet(idx + 1, "border-width: 0px 0px 4px 0px; border-color:rgb(0,226,142); border-style: solid;");
+                if (current_date_time.secsTo(current_class_end_time) == 0 and shangkelema) {
+                    shangkelema = false;
+                    
+                    if (canShow(QString("%1 已经下课，请做好下节课上课准备").arg(current_class["name"].toString()))) {
+                        emit showStatusMessage(QString("%1 已经上课，请做好上课准备").arg(current_class["name"].toString()));
+                    }
+                    else if (canShow(QString("%1 已下课").arg(current_class["name"].toString()))) {
+                        emit showStatusMessage(QString("%1 已下课").arg(current_class["name"].toString()));
+                    }
+                    else {
+                        emit showStatusMessage(QString("下课时间到"));
+                    }
+                }
+                int diff_time = current_date_time.secsTo(next_class_start_time); // 当前时间 - 下一节课开始时间 (课间还剩多久)
+                int hour = diff_time / 3600;
+                diff_time = diff_time % 3600;
+                int min = diff_time / 60;
+                int sec = diff_time % 60;
+                QString display_string = QString("%1:%2:%3").arg(hour, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')).arg(sec, 2, 10, QLatin1Char('0'));
+                emit tst(display_string);
+                if (hour == 0 && min == 2 && sec == 0) {
+                    if (canShow(QString("%1 即将上课，请做好上课准备").arg(current_class["name"].toString()))) {
+                        emit showStatusMessage(QString("%1 即将上课，请做好上课准备").arg(current_class["name"].toString()));
+                    }
+                    else if (canShow(QString("%1 即将上课").arg(current_class["name"].toString()))) {
+                        emit showStatusMessage(QString("%1 即将上课").arg(current_class["name"].toString()));
+                    }
+                    else {
+                        emit showStatusMessage(QString("即将上课"));
+                    }
+                }
+                Sleep(50);
+                continue;
+            }
+            idx++; //下一节课
+            continue;
+        }
+        else {
+            idx++; //下一节课
+            continue;
+        }
+        
     }
     emit changeStackedIndex(0);
     emit toDone();

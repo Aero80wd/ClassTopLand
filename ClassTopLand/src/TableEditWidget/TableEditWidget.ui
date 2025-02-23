@@ -141,7 +141,7 @@ border-bottom:3px solid #1191d3;
            <number>25</number>
           </property>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,2,2,2,2">
+           <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,2,2,2">
             <item>
              <widget class="QLineEdit" name="lineEdit">
               <property name="minimumSize">
@@ -193,25 +193,6 @@ border-bottom:3px solid #1191d3;
               </property>
               <property name="styleSheet">
                <string notr="true"/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>输入离上课的课间时间</string>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="maximum">
-               <number>999999999</number>
               </property>
              </widget>
             </item>
@@ -395,29 +376,19 @@ background:#1191d3;
               <string>下课时间</string>
              </property>
             </column>
-            <column>
-             <property name="text">
-              <string>课间时间</string>
-             </property>
-            </column>
             <item row="0" column="0">
              <property name="text">
-              <string>1</string>
+              <string/>
              </property>
             </item>
             <item row="0" column="1">
              <property name="text">
-              <string>1</string>
+              <string/>
              </property>
             </item>
             <item row="0" column="2">
              <property name="text">
-              <string>1</string>
-             </property>
-            </item>
-            <item row="0" column="3">
-             <property name="text">
-              <string>1</string>
+              <string/>
              </property>
             </item>
            </widget>
@@ -448,25 +419,42 @@ background:#1191d3;
         <number>10</number>
        </property>
        <item>
-        <widget class="QCheckBox" name="chkHide">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string>隐藏工具栏</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="2,0">
+         <item>
+          <widget class="QCheckBox" name="chkHide">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>隐藏工具栏</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QLabel" name="label_7">
@@ -908,7 +896,7 @@ background:#1191d3;
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0,1,1,0,1">
+        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0,1,1,1">
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
@@ -994,36 +982,6 @@ background:rgb(11, 96, 139);
            <property name="icon">
             <iconset resource="../../res.qrc">
              <normaloff>:/res/gitee.png</normaloff>:/res/gitee.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="checkUpdate">
-           <property name="minimumSize">
-            <size>
-             <width>147</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton{
-	border-radius: 3px; /* 边框圆角 */
-	color:#ffffff;
-	background-color: #1191d3; /* 背景颜色 */
-	padding:3px;
-
-}
-QPushButton:hover{
-background:rgb(11, 96, 139);
-}
-</string>
-           </property>
-           <property name="text">
-            <string>检查更新</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../res.qrc">
-             <normaloff>:/res/update_tool_icon.png</normaloff>:/res/update_tool_icon.png</iconset>
            </property>
           </widget>
          </item>
