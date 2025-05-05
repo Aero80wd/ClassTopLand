@@ -15,12 +15,12 @@ void CloudSettingsTab::initUi()
 {
     ui.login_but->disconnect();
     ui.register_but->disconnect();
-    ui.addClass->disconnect();
-    ui.deleteClass->disconnect();
+    //ui.addClass->disconnect();
+    //ui.deleteClass->disconnect();
 	loadStyleSheet(this, ":/qss/CloudSettingsTab.qss");
     connect(ui.register_but, &QPushButton::clicked, this, &CloudSettingsTab::registerUser);
-    connect(ui.addClass, &QPushButton::clicked, this, &CloudSettingsTab::addClass);
-    connect(ui.deleteClass, &QPushButton::clicked, this, &CloudSettingsTab::deleteClass);
+    //connect(ui.addClass, &QPushButton::clicked, this, &CloudSettingsTab::addClass);
+    //connect(ui.deleteClass, &QPushButton::clicked, this, &CloudSettingsTab::deleteClass);
     qDebug() << "initUi";
     if (m_isLogin) {
         ui.login_but->setText("退出登录");
@@ -53,7 +53,7 @@ void CloudSettingsTab::exitLogin()
         QTextStream stream(&file);
         stream << QJsonDocument(Config).toJson();
         file.close();
-        ui.classWidget->clear();
+        //ui.classWidget->clear();
         
         initUserInfo();
         initUi();
@@ -90,7 +90,7 @@ void CloudSettingsTab::readConfig()
                 
                 initUi();
                 initUserInfo(); // 登录成功后初始化用户信息
-                getUserClasses();
+                //getUserClasses();
             }
             });
         m_priReq->start(data); // 修正了这里的数据传递方式
@@ -211,7 +211,10 @@ void CloudSettingsTab::loginUser() {
                 login_window->close();
                 initUi();
                 initUserInfo();
-                getUserClasses();
+                //getUserClasses();
+            }
+            else {
+                QMessageBox::critical(this, "错误", json["msg"].toString());
             }
         });
         m_priReq->start(data);
@@ -281,7 +284,7 @@ void CloudSettingsTab::registerUser() {
             }
             qDebug() << json;
             if (json["code"].toInt() == 200) {
-                QMessageBox::information(this, "成功", "注册成功！");
+                QMessageBox::information(this, "成功", "注册成功！请查看您QQ号下属QQ邮箱，打开验证邮件，对账号进行验证。");
                 register_window->close();
             }
             else {
@@ -292,113 +295,113 @@ void CloudSettingsTab::registerUser() {
         });
 }
 
-void CloudSettingsTab::getUserClasses() {
-    ui.classWidget->clear();
-    if (m_isLogin) {
-        ui.classWidget->clear();
-        m_priReq = new NetworkRequests(POST, CloudAPIUrl::GET_CLASS_LIST);
-        connect(m_priReq, &NetworkRequests::finished, [=](QJsonObject json, QString reply_string, QString error_string) {
-            if (!error_string.isEmpty())
-            {
-                QMessageBox::critical(this, "错误", "请求失败！");
-                return;
-            }
-            if (json["code"].toInt() == 200) {
-                QJsonArray classes = json["data"].toArray();
-                for (int i = 0; i < classes.size(); i++) {
-                    QJsonObject class_obj = classes[i].toObject();
-                    QString class_name = class_obj["name"].toString();
-                    QString class_byuser = class_obj["byusername"].toString();
-                    QListWidgetItem * item = new QListWidgetItem();
-                    item->setData(Qt::UserRole, class_obj["id"].toInteger());
-                    item->setText(QString("%1 (By %2)").arg(class_name, class_byuser));
-                    ui.classWidget->addItem(item);
-                }
-            }
-            });
-        QJsonObject headers = { {"token",Config["ClassTopLand.Cloud.UserToken"].toString()} };
-        m_priReq->start(QJsonObject(), headers);
-    }
-    
-
-}
-
-void CloudSettingsTab::deleteClass()
-{
-    QListWidgetItem * item = ui.classWidget->currentItem();
-    if (item == nullptr) {
-        QMessageBox::critical(this, "错误", "请选择要删除的班级！");
-        return;
-    }
-    if (QMessageBox::warning(this, "警告", "确定要删除该班级吗？", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
-        return;
-    }
-    m_priReq = new NetworkRequests(POST, CloudAPIUrl::DELETE_CLASS);
-    connect(m_priReq, &NetworkRequests::finished, [=](QJsonObject json, QString reply_string, QString error_string) {
-        if (!error_string.isEmpty())
-        {
-            QMessageBox::critical(this, "错误", "请求失败！");
-            return;
-        }
-        if (json["code"].toInt() == 200) {
-            QMessageBox::information(this, "成功", "删除成功！");
-            ui.classWidget->removeItemWidget(item);
-            delete item;
-        }
-        else {
-            QMessageBox::critical(this, "错误", json["msg"].toString());
-        }
-        getUserClasses();
-
-
-    });
-    QJsonObject data = {
-        {"class", item->data(Qt::UserRole).toInt()}
-    };
-    QJsonObject headers = { {"token",Config["ClassTopLand.Cloud.UserToken"].toString()} };
-    m_priReq->start(data,headers);
-
-
-}
-
-void CloudSettingsTab::addClass()
-{
-    QInputDialog* input_dialog = new QInputDialog(this);
-    input_dialog->setWindowTitle("添加班级");
-    input_dialog->setLabelText("请输入班级名称：");
-    input_dialog->setTextValue("");
-    input_dialog->setOkButtonText("确定");
-    input_dialog->setCancelButtonText("取消");
-    connect(input_dialog, &QInputDialog::accepted, [=]() {
-        if (input_dialog->textValue().isEmpty()) {
-            QMessageBox::critical(this, "错误", "班级名称不能为空！");
-            return;
-        }
-        m_priReq = new NetworkRequests(POST, CloudAPIUrl::ADD_CLASS);
-        connect(m_priReq, &NetworkRequests::finished, [=](QJsonObject json, QString reply_string, QString error_string) {
-            if (!error_string.isEmpty())
-            {
-                QMessageBox::critical(this, "错误", "请求失败！");
-                
-                return;
-            }
-            if (json["code"].toInt() == 200) {
-                QMessageBox::information(this, "成功", "添加成功！");
-                getUserClasses();
-                showLog("added class!", INFO);
-            }
-            else {
-                QMessageBox::critical(this, "错误", json["msg"].toString());
-            }
-        });
-        QJsonObject data = {
-            {"name", input_dialog->textValue()}
-        };
-        QJsonObject headers = { {"token",Config["ClassTopLand.Cloud.UserToken"].toString()} };
-        m_priReq->start(data, headers);
-        
-
-
-    });
-    input_dialog->exec();
-}
+//void CloudSettingsTab::getUserClasses() {
+//    ui.classWidget->clear();
+//    if (m_isLogin) {
+//        ui.classWidget->clear();
+//        m_priReq = new NetworkRequests(POST, CloudAPIUrl::GET_CLASS_LIST);
+//        connect(m_priReq, &NetworkRequests::finished, [=](QJsonObject json, QString reply_string, QString error_string) {
+//            if (!error_string.isEmpty())
+//            {
+//                QMessageBox::critical(this, "错误", "请求失败！");
+//                return;
+//            }
+//            if (json["code"].toInt() == 200) {
+//                QJsonArray classes = json["data"].toArray();
+//                for (int i = 0; i < classes.size(); i++) {
+//                    QJsonObject class_obj = classes[i].toObject();
+//                    QString class_name = class_obj["name"].toString();
+//                    QString class_byuser = class_obj["byusername"].toString();
+//                    QListWidgetItem * item = new QListWidgetItem();
+//                    item->setData(Qt::UserRole, class_obj["id"].toInteger());
+//                    item->setText(QString("%1 (By %2)").arg(class_name, class_byuser));
+//                    ui.classWidget->addItem(item);
+//                }
+//            }
+//            });
+//        QJsonObject headers = { {"token",Config["ClassTopLand.Cloud.UserToken"].toString()} };
+//        m_priReq->start(QJsonObject(), headers);
+//    }
+//    
+//
+//}
+//
+//void CloudSettingsTab::deleteClass()
+//{
+//    QListWidgetItem * item = ui.classWidget->currentItem();
+//    if (item == nullptr) {
+//        QMessageBox::critical(this, "错误", "请选择要删除的班级！");
+//        return;
+//    }
+//    if (QMessageBox::warning(this, "警告", "确定要删除该班级吗？", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+//        return;
+//    }
+//    m_priReq = new NetworkRequests(POST, CloudAPIUrl::DELETE_CLASS);
+//    connect(m_priReq, &NetworkRequests::finished, [=](QJsonObject json, QString reply_string, QString error_string) {
+//        if (!error_string.isEmpty())
+//        {
+//            QMessageBox::critical(this, "错误", "请求失败！");
+//            return;
+//        }
+//        if (json["code"].toInt() == 200) {
+//            QMessageBox::information(this, "成功", "删除成功！");
+//            ui.classWidget->removeItemWidget(item);
+//            delete item;
+//        }
+//        else {
+//            QMessageBox::critical(this, "错误", json["msg"].toString());
+//        }
+//        getUserClasses();
+//
+//
+//    });
+//    QJsonObject data = {
+//        {"class", item->data(Qt::UserRole).toInt()}
+//    };
+//    QJsonObject headers = { {"token",Config["ClassTopLand.Cloud.UserToken"].toString()} };
+//    m_priReq->start(data,headers);
+//
+//
+//}
+//
+//void CloudSettingsTab::addClass()
+//{
+//    QInputDialog* input_dialog = new QInputDialog(this);
+//    input_dialog->setWindowTitle("添加班级");
+//    input_dialog->setLabelText("请输入班级名称：");
+//    input_dialog->setTextValue("");
+//    input_dialog->setOkButtonText("确定");
+//    input_dialog->setCancelButtonText("取消");
+//    connect(input_dialog, &QInputDialog::accepted, [=]() {
+//        if (input_dialog->textValue().isEmpty()) {
+//            QMessageBox::critical(this, "错误", "班级名称不能为空！");
+//            return;
+//        }
+//        m_priReq = new NetworkRequests(POST, CloudAPIUrl::ADD_CLASS);
+//        connect(m_priReq, &NetworkRequests::finished, [=](QJsonObject json, QString reply_string, QString error_string) {
+//            if (!error_string.isEmpty())
+//            {
+//                QMessageBox::critical(this, "错误", "请求失败！");
+//                
+//                return;
+//            }
+//            if (json["code"].toInt() == 200) {
+//                QMessageBox::information(this, "成功", "添加成功！");
+//                getUserClasses();
+//                showLog("added class!", INFO);
+//            }
+//            else {
+//                QMessageBox::critical(this, "错误", json["msg"].toString());
+//            }
+//        });
+//        QJsonObject data = {
+//            {"name", input_dialog->textValue()}
+//        };
+//        QJsonObject headers = { {"token",Config["ClassTopLand.Cloud.UserToken"].toString()} };
+//        m_priReq->start(data, headers);
+//        
+//
+//
+//    });
+//    input_dialog->exec();
+//}

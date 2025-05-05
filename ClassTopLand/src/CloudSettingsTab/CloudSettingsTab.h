@@ -31,10 +31,10 @@ private:
 	void registerUser();
 	void loginUser();
 	void exitLogin();
-	void getUserClasses();
+	//void getUserClasses();
 private slots:
-	void addClass();
-	void deleteClass();
+	//void addClass();
+	//void deleteClass();
 private:
 	NetworkRequests* m_priReq;
 	bool m_isLogin = false;

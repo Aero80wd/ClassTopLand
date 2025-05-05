@@ -77,6 +77,9 @@
     <ClCompile Include="src\ClassEditDialog\ClassEditDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ExportAPISettingsTab\ExportAPISettingsTab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\AppendixTableManager\AppendixTableManager.ui">
@@ -110,6 +113,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="src\ClassEditDialog\ClassEditDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\ExportAPISettingsTab\ExportAPISettingsTab.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -157,6 +163,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\ClassEditDialog\ClassEditDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ExportAPISettingsTab\ExportAPISettingsTab.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

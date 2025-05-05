@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>854</width>
+    <width>896</width>
     <height>525</height>
    </rect>
   </property>
@@ -103,7 +103,7 @@ border-bottom:3px solid #1191d3;
       <enum>QTabWidget::TabShape::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -675,25 +675,14 @@ background:#1191d3;
      </widget>
      <widget class="QWidget" name="tab_6">
       <attribute name="title">
-       <string>同步设置</string>
+       <string>云账户设置</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
-        <widget class="QLabel" name="label_12">
-         <property name="font">
-          <font>
-           <pointsize>20</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>前面的区域，以后再来探索吧！</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout_7"/>
+     </widget>
+     <widget class="ExportAPISettingsTab" name="tab_8">
+      <attribute name="title">
+       <string>第三方API服务</string>
+      </attribute>
      </widget>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
@@ -1033,41 +1022,7 @@ background:rgb(11, 96, 139);
         <number>0</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,2,5,1">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_7">
-           <item>
-            <widget class="QCheckBox" name="checkBox_2">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <property name="text">
-              <string>打开口吐芬芳</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <property name="text">
-              <string>打开木鱼</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
+        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,5,1">
          <item>
           <widget class="QLabel" name="label_9">
            <property name="font">
@@ -1076,7 +1031,10 @@ background:rgb(11, 96, 139);
             </font>
            </property>
            <property name="text">
-            <string>修改设置后请重启程序</string>
+            <string>这里什么也没有......吗？</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -1126,6 +1084,12 @@ background:rgb(11, 96, 139);
    <class>ClickLabel</class>
    <extends>QLabel</extends>
    <header>../../../../src/ClickLabel/ClickLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ExportAPISettingsTab</class>
+   <extends>QWidget</extends>
+   <header>../../../../src/ExportAPISettingsTab/ExportAPISettingsTab.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

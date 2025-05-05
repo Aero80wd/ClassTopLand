@@ -388,7 +388,7 @@ void refechTableThread::run(){
                     shangkelema = false;
                     
                     if (canShow(QString("%1 已经下课，请做好下节课上课准备").arg(current_class["name"].toString()))) {
-                        emit showStatusMessage(QString("%1 已经上课，请做好上课准备").arg(current_class["name"].toString()));
+                        emit showStatusMessage(QString("%1 已经下课，请做好下节课上课准备").arg(current_class["name"].toString()));
                     }
                     else if (canShow(QString("%1 已下课").arg(current_class["name"].toString()))) {
                         emit showStatusMessage(QString("%1 已下课").arg(current_class["name"].toString()));
@@ -405,11 +405,11 @@ void refechTableThread::run(){
                 QString display_string = QString("%1:%2:%3").arg(hour, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')).arg(sec, 2, 10, QLatin1Char('0'));
                 emit tst(display_string);
                 if (hour == 0 && min == 2 && sec == 0) {
-                    if (canShow(QString("%1 即将上课，请做好上课准备").arg(current_class["name"].toString()))) {
-                        emit showStatusMessage(QString("%1 即将上课，请做好上课准备").arg(current_class["name"].toString()));
+                    if (canShow(QString("%1 即将上课，请做好上课准备").arg(next_class["name"].toString()))) {
+                        emit showStatusMessage(QString("%1 即将上课，请做好上课准备").arg(next_class["name"].toString()));
                     }
-                    else if (canShow(QString("%1 即将上课").arg(current_class["name"].toString()))) {
-                        emit showStatusMessage(QString("%1 即将上课").arg(current_class["name"].toString()));
+                    else if (canShow(QString("%1 即将上课").arg(next_class["name"].toString()))) {
+                        emit showStatusMessage(QString("%1 即将上课").arg(next_class["name"].toString()));
                     }
                     else {
                         emit showStatusMessage(QString("即将上课"));

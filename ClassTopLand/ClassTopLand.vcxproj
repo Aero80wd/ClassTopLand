@@ -127,6 +127,7 @@
     <ClCompile Include="src\AppLog\AppLog.cpp" />
     <ClCompile Include="src\ClickLabel\ClickLabel.cpp" />
     <ClCompile Include="src\DayTimerWidget\DayTimerWidget.cpp" />
+    <ClCompile Include="src\ExportAPISettingsTab\ExportAPISettingsTab.cpp" />
     <ClCompile Include="src\GetStartWidget\GetStartWidget.cpp" />
     <ClCompile Include="src\MainTableWidget\MainTableWidget.cpp" />
     <ClCompile Include="src\MainWindow\MainWindow.cpp" />
@@ -144,6 +145,7 @@
     <QtUic Include="src\CloudSettingsTab\CloudSettingsTab.ui" />
     <QtUic Include="src\AppendixTableManager\AppendixTableManager.ui" />
     <QtUic Include="src\DayTimerWidget\DayTimerWidget.ui" />
+    <QtUic Include="src\ExportAPISettingsTab\ExportAPISettingsTab.ui" />
     <QtUic Include="src\GetStartWidget\GetStartWidget.ui" />
     <QtUic Include="src\MainTableWidget\MainTableWidget.ui" />
     <QtUic Include="src\MainWindow\MainWindow.ui" />
@@ -158,6 +160,7 @@
   <ItemGroup>
     <QtMoc Include="src\ClassEditDialog\ClassEditDialog.h" />
     <ClInclude Include="src\CloudAPI.h" />
+    <QtMoc Include="src\ExportAPISettingsTab\ExportAPISettingsTab.h" />
     <ClInclude Include="src\Utils\Utils.h" />
     <QtMoc Include="src\CloudSettingsTab\CloudSettingsTab.h" />
     <ClInclude Include="resource.h" />

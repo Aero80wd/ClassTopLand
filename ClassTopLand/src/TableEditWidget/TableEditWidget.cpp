@@ -167,8 +167,6 @@ void TableEditWidget::on_editAppendixTable(QString table_name) {
 
 void TableEditWidget::setConfig(QJsonObject obj){
     m_joConfig=obj;
-    ui->checkBox_2->setChecked(m_joConfig.value("zuan_status").toBool());
-    ui->checkBox->setChecked(m_joConfig.value("muyu_status").toBool());
     ui->chkHide->setChecked(m_joConfig.value("toolbox_status").toBool());
     ui->timer_hide->setChecked(m_joConfig.value("disable_timer").toBool());
     ui->timer_time->setDateTime(QDateTime::fromString(m_joConfig["end_time"].toString(),"yyyy-MM-dd hh:mm:ss"));
