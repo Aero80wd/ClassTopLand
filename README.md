@@ -10,14 +10,14 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Version-v5.4-2334D05" alt="Version">
+    <img src="https://img.shields.io/badge/Version-v6.3-2334D05" alt="Version">
 
   <a style="text-decoration:none" href="/LICENSE">
     <img src="https://img.shields.io/badge/License-GPLv2-blue?color=#4ec820" alt="GPLv2"/>
   </a>
 
   <a style="text-decoration:none" href="https://github.com/Aero80wd/ClassTopLand/releases">
-    <img src="https://img.shields.io/badge/Platform-Windows_Only-blue?color=#4ec820" alt="Platform Win32 | Linux | macOS"/>
+    <img src="https://img.shields.io/badge/Platform-Windows-blue?color=#4ec820" alt="Platform Win32 | Linux | macOS"/>
   </a>
 </p>
 
@@ -42,6 +42,8 @@
 > **注意**
 > 如运行出现缺失DLL，请下载安装[VS2019运行库](https://aka.ms/vs/17/release/vc_redist.x64.exe)。
 ## 更新日志
+### [v6.3] - 2025-7-15
+- 增加外部API
 ### [v6.2] - 2025-2-23
 - 重构课程更新机制（md原来的我现在都看不懂😰😰😰）
 - 删除检查更新功能（I FXXK GITEE！！！😡😡😡😡😡😡😡😡😡😡）
@@ -83,7 +85,6 @@ Happy New Year!
 - 该版本为第一个较稳定版本，功能bug基本修复完毕
 - 更改项目目录结构，将源文件、头文件、UI文件、资源文件进行分类
 - 使用资源文件字体避免需安装字体后才可使用倒计时
-
 ## 关于插件
 ### 安装
 打开设置中的工具栏设置，将插件文件或快捷方式放入插件列表中。

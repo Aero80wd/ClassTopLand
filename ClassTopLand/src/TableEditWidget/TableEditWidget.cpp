@@ -7,23 +7,19 @@ TableEditWidget::TableEditWidget(QWidget *parent)
     , ui(new Ui::TableEditWidget)
 {
     ui->setupUi(this);
-    ui->tabWidget->removeTab(6);
     connect(ui->radioButton,SIGNAL(toggled(bool)),this,SLOT(toggleded()));
     connect(ui->radioButton_2,SIGNAL(toggled(bool)),this,SLOT(toggleded()));
     connect(ui->radioButton_3,SIGNAL(toggled(bool)),this,SLOT(toggleded()));
     connect(ui->radioButton_4,SIGNAL(toggled(bool)),this,SLOT(toggleded()));
     connect(ui->radioButton_5,SIGNAL(toggled(bool)),this,SLOT(toggleded()));
-    connect(ui->pushButton_2,&QPushButton::clicked,this,[=]{
-        ui->tabWidget->removeTab(6);
-    });
     connect(ui->label,&ClickLabel::clicked,this,[=]{
         if (m_iClickcnt >=10){
             m_iClickcnt=0;
             QInputDialog dialog{this, Qt::WindowCloseButtonHint};
-            dialog.setWindowTitle(tr("Debug Code"));
+            dialog.setWindowTitle(tr("调试码"));
             dialog.setInputMode(QInputDialog::InputMode::TextInput);
             dialog.setTextEchoMode(QLineEdit::Normal);
-            dialog.setLabelText(tr("Enter Debug Code To Run"));
+            dialog.setLabelText(tr("请输入调试码"));
             dialog.setOkButtonText(QObject::tr("确定"));
             dialog.setCancelButtonText(QObject::tr("取消"));
             dialog.setFixedSize(350,250);
@@ -38,11 +34,11 @@ TableEditWidget::TableEditWidget(QWidget *parent)
                 QString hash_value = hasharray.toHex();
                 qDebug() << hash_value;
                 if (hash_value == "e0685ce779369daa2f5569ce790ff01138dd5db46ff57ffeab94de514e86504c") {
-                    ui->tabWidget->insertTab(6, ui->tab_3, QString(tr("彩蛋设置")));
+                    QMessageBox::information(this, "提示", "这里好像少了点什么......");
                 }else if (hash_value == "a8c97315e9aa9eed727ae5aa9515e2a27d4df30cc68c4a210fa7b2d3c4e3ea20") {
                     QDesktopServices::openUrl(QUrl("https://www.bilibili.com/video/BV1wv411Y7YN"));
                 }else{
-                   QMessageBox::critical(this,"Error","Debug Code Not Found!");
+                   QMessageBox::critical(this,"错误","调试码无效！");
                 }
             }
 
