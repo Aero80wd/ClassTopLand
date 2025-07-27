@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ClassTopLand CXX OBJCXX)
+project(ClassTopLand)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)         # 自动调用 moc
