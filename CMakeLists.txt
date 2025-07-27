@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ClassTopLand CXX OBJCXX)
+project(ClassTopLand)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)         # 自动调用 moc
@@ -41,7 +41,8 @@ set(MAIN_SOURCE main.cpp
         src/Utils/Utils.h
         src/FluentTabWidget/FluentTabWidget.cpp
         src/FluentTabWidget/FluentTabWidget.h
-        )
+        resource.rc
+)
 
     qt_add_executable(
             ${PROJECT_NAME}
@@ -50,25 +51,26 @@ set(MAIN_SOURCE main.cpp
             ${RESOURCE_FILES}
     )
 # 创建可执行文件（会自动处理 .ui/.qrc）
-if (APPLE AND ${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    set_target_properties(ClassTopLand PROPERTIES
-            MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
-            MACOSX_BUNDLE_GUI_IDENTIFIER com.aero8m.classtopland
-            MACOSX_BUNDLE_BUNDLE_NAME "ClassTopLand"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "7.0"
-            MACOSX_BUNDLE_LONG_VERSION_STRING "7.0.0"
-            MACOSX_BUNDLE_COPYRIGHT "OpenSource By GPL"
-            MACOSX_BUNDLE_ICON_FILE app.icns
-    )
-    target_sources(ClassTopLand PRIVATE
-            app.icns
-    )
 
-    set_source_files_properties(app.icns PROPERTIES
-            MACOSX_PACKAGE_LOCATION "Resources"
-    )
-endif()
+set_target_properties(ClassTopLand PROPERTIES
+        WIN32_EXECUTABLE TRUE
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.aero8m.classtopland
+        MACOSX_BUNDLE_BUNDLE_NAME "ClassTopLand"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "7.0"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "7.0.0"
+        MACOSX_BUNDLE_COPYRIGHT "OpenSource By GPL"
+        MACOSX_BUNDLE_ICON_FILE app.icns
+)
+target_sources(ClassTopLand PRIVATE
+        app.icns
+)
+
+set_source_files_properties(app.icns PROPERTIES
+        MACOSX_PACKAGE_LOCATION "Resources"
+)
+
 if (UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
     target_include_directories(ClassTopLand PRIVATE ${X11_INCLUDE_DIR})

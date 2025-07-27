@@ -17,7 +17,8 @@
   </a>
 
   <a style="text-decoration:none" href="https://github.com/Aero80wd/ClassTopLand/releases">
-    <img src="https://img.shields.io/badge/Platform-Windows_Only-blue?color=#4ec820" alt="Platform Win32 | Linux | macOS"/>
+    <img src="https://img.shields.io/badge/Platform-Win32%20|%20Linux%20|%20macOS-blue?color=#4ec820" alt="Platform Win32 | Linux | macOS"/>
+    h
   </a>
 </p>
 
@@ -42,6 +43,9 @@
 > **注意**
 > 如运行出现缺失DLL，请下载安装[VS2019运行库](https://aka.ms/vs/17/release/vc_redist.x64.exe)。
 ## 更新日志
+### [v6.3] - 2025-7-27
+- 更改设置UI
+- 更改软件存储位置为用户主目录下的ClassTopLand_Data目录
 ### [v6.2] - 2025-2-23
 - 重构课程更新机制（md原来的我现在都看不懂😰😰😰）
 - 删除检查更新功能（I FXXK GITEE！！！😡😡😡😡😡😡😡😡😡😡）
