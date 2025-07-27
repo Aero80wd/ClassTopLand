@@ -124,7 +124,7 @@ void TableEditWidget::saveWeatherLocaltions()
     }
     m_joConfig["weather_localtion_id"] = ui->weather_localtion_select->currentData().toString();
     m_joConfig["weather_localtion_name"] = ui->weather_localtion_select->currentText();
-    QFile config_file(QDir::currentPath() + "/config.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joConfig);
@@ -177,7 +177,7 @@ void TableEditWidget::on_timerInfo_changed(){
     m_joConfig["english_end"] = QString("There is not a $\nleft until %1").arg(ui->edit_name_eng->text());
     m_joConfig["english_tag"] = ui->edit_name_eng->text();
     m_joConfig["disable_timer"] = ui->timer_hide->isChecked();
-    QFile config_file(QDir::currentPath() + "/config.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joConfig);
@@ -187,7 +187,7 @@ void TableEditWidget::on_timerInfo_changed(){
 }
 
 void TableEditWidget::readTableJson(){
-    QFile file(QDir::currentPath() + "/tables.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
 
@@ -205,9 +205,9 @@ void TableEditWidget::readTableJson(){
 
 }
 void TableEditWidget::readPluginList(){
-    QDir plugin_dir(QDir::currentPath() + "/plugins");
+    QDir plugin_dir(QDir::homePath() + "/ClassTopLand_Data" + "/plugins");
     if (!plugin_dir.exists()){
-        plugin_dir.mkdir(QDir::currentPath() + "/plugins");
+        plugin_dir.mkdir(QDir::homePath() + "/ClassTopLand_Data" + "/plugins");
         return;
     }
     QFileInfoList fileList = plugin_dir.entryInfoList();
@@ -319,7 +319,7 @@ void TableEditWidget::addItem(QString key){
     }else{
         m_joTimeTable[key] = editarray;
     }
-    QFile config_file(QDir::currentPath() + "/tables.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joTimeTable);
@@ -360,10 +360,10 @@ bool TableEditWidget::eventFilter(QObject *watched,QEvent*event)
 
             if (fileName.split(".").last() == "zip"){
                 QZipReader reader(fileName);
-                reader.extractAll(QDir::currentPath() + "/plugins");
-                QFile file(QDir::currentPath() + "/plugins");
+                reader.extractAll(QDir::homePath() + "/ClassTopLand_Data" + "/plugins");
+                QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/plugins");
                 file.open(QIODevice::WriteOnly);
-                file.write(reader.fileData(QDir::currentPath() + "/plugins/" + QTime::currentTime().toString()));
+                file.write(reader.fileData(QDir::homePath() + "/ClassTopLand_Data" + "/plugins/" + QTime::currentTime().toString()));
                 file.close();
                 reader.close();
                 readPluginList();
@@ -380,9 +380,9 @@ bool TableEditWidget::eventFilter(QObject *watched,QEvent*event)
                     pluginObj["pluginAuthor"] = "";
                     pluginObj["pluginIntroduce"] = info.baseName();
                     pluginObj["icon"] = "icon.png";
-                    QDir pluginDir(QDir::currentPath() + "/plugins/" + info.baseName());
-                    pluginDir.mkdir(QDir::currentPath() + "/plugins/" + info.baseName());
-                    QFile file(QDir::currentPath() + "/plugins/" + info.baseName() + "/pluginConfig.json");
+                    QDir pluginDir(QDir::homePath() + "/ClassTopLand_Data" + "/plugins/" + info.baseName());
+                    pluginDir.mkdir(QDir::homePath() + "/ClassTopLand_Data" + "/plugins/" + info.baseName());
+                    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/plugins/" + info.baseName() + "/pluginConfig.json");
                     file.open(QIODevice::ReadWrite);
                     QJsonDocument pluginDoc;
                     pluginDoc.setObject(pluginObj);
@@ -392,7 +392,7 @@ bool TableEditWidget::eventFilter(QObject *watched,QEvent*event)
                     QFileIconProvider fileicon;
                     QIcon icon=fileicon.icon(fileinfo);
                     QPixmap pixmap = icon.pixmap(256,256);
-                    pixmap.save(QDir::currentPath() + "/plugins/" + info.baseName() + "/icon.png");
+                    pixmap.save(QDir::homePath() + "/ClassTopLand_Data" + "/plugins/" + info.baseName() + "/icon.png");
                     readPluginList();
                     emit refechToolBar_signal();
 
@@ -462,7 +462,7 @@ void TableEditWidget::on_pushButton_clicked()
 void TableEditWidget::on_checkBox_2_clicked(bool checked)
 {
     m_joConfig["zuan_status"] = checked;
-    QFile config_file(QDir::currentPath() + "/config.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joConfig);
@@ -476,7 +476,7 @@ void TableEditWidget::on_checkBox_2_clicked(bool checked)
 void TableEditWidget::on_checkBox_clicked(bool checked)
 {
     m_joConfig["muyu_status"] = checked;
-    QFile config_file(QDir::currentPath() + "/config.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joConfig);
@@ -489,7 +489,7 @@ void TableEditWidget::on_checkBox_clicked(bool checked)
 void TableEditWidget::on_chkHide_clicked(bool checked)
 {
     m_joConfig["toolbox_status"] = checked;
-    QFile config_file(QDir::currentPath() + "/config.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joConfig);
@@ -547,7 +547,7 @@ void TableEditWidget::on_pluginList_itemDoubleClicked(QListWidgetItem *item)
 
 }
 void TableEditWidget::_startUpdateTool() {
-    //system(QString("start %1\\updateTool \"v%2\"").arg(QDir::currentPath()).arg(APP_VERSION).toStdWString().c_str());
+    //system(QString("start %1\\updateTool \"v%2\"").arg(QDir::homePath() + "/ClassTopLand_Data").arg(APP_VERSION).toStdWString().c_str());
     return;
 
 }
@@ -613,7 +613,7 @@ void TableEditWidget::on_cellChanged(int row, int column) {
         appendix_tables[current_table_name] = current_table;
         m_joTimeTable["appendixTables"] = appendix_tables;
     }
-    QFile config_file(QDir::currentPath() + "/tables.json");
+    QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     config_file.open(QFile::WriteOnly);
     QJsonDocument temp_doc;
     temp_doc.setObject(m_joTimeTable);

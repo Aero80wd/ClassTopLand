@@ -48,7 +48,7 @@ void CloudSettingsTab::exitLogin()
     if (msgBox->exec() == QMessageBox::Yes){
         m_isLogin = false;
         Config.remove("ClassTopLand.Cloud.UserToken");
-        QFile file(QDir::currentPath() + "/config.json");
+        QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream stream(&file);
         stream << QJsonDocument(Config).toJson();
@@ -63,7 +63,7 @@ void CloudSettingsTab::exitLogin()
 
 void CloudSettingsTab::readConfig()
 {
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
     QTextStream stream(&file);
     QString file_str = stream.readAll();
@@ -201,7 +201,7 @@ void CloudSettingsTab::loginUser() {
             }
             if (json["code"].toInt() == 200) {
                 Config["ClassTopLand.Cloud.UserToken"] = json["token"].toString();
-                QFile file(QDir::currentPath() + "/config.json");
+                QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
                 file.open(QIODevice::ReadWrite | QIODevice::Text);
                 QTextStream stream(&file);
                 stream << QJsonDocument(Config).toJson();

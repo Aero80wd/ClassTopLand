@@ -1,8 +1,17 @@
 #include "GlassHelper.h"
 #include <QWidget>
 #include <QDebug>
-
+#include <QPainter>
+#include <QPixmap>
+#include <QApplication>
+#include <QScreen>
+#include <QLabel>
+#include <QTimer>
+#include <QImage>
+#include <QDebug>
+#include <cmath>
 #include <qguiapplication.h>
+#include <QWindow>
 #ifdef __linux__
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -30,11 +39,17 @@ struct WindowCompositionAttributeData {
     ULONG DataSize;
 };
 #endif
+#ifdef __APPLE__
+#endif
+
 void GlassHelper::enableBlurBehind(QWidget *widget,int alpha) {
 #ifdef __linux__
     enableBlurBehindX11(widget);
 #elifdef _WIN32
     enableBlurBehindWin32(widget,alpha);
+#elifdef __APPLE__
+    qDebug() << QString("%1 {background: rgba(255,255,255,0.7);}").arg(widget->metaObject()->className());
+    widget->setStyleSheet(QString("%1 {background-color: rgba(255,255,255,0.7);}").arg(widget->metaObject()->className()));
 #endif
 
 }
@@ -113,3 +128,4 @@ void GlassHelper::enableBlurBehindWin32(QWidget* widget,int alpha) {
 
 }
 #endif
+

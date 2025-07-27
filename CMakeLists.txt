@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ClassTopLand)
+project(ClassTopLand CXX OBJCXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)         # 自动调用 moc
@@ -11,6 +11,8 @@ if (UNIX AND NOT APPLE)
     set(CMAKE_PREFIX_PATH "/home/jiahang/Qt/6.7.3/gcc_64/lib/cmake/")
 elseif(WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.7.2/msvc2019_64/lib/cmake")
+elseif(APPLE)
+    set(CMAKE_PREFIX_PATH "/Users/jiahang/Qt/6.7.3/macos/lib/cmake/")
 endif()
 
 if (UNIX AND NOT APPLE)
@@ -23,29 +25,50 @@ find_package(Qt6 COMPONENTS
         Gui
         Widgets
         Network
-        WebEngineWidgets
-        Test
-        REQUIRED
+WebEngineWidgets
+Test
+REQUIRED
 )
 
 # 收集 src 及其子目录中的源文件
 file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.h" "src/*.ui")
 set(RESOURCE_FILES res.qrc)
+
 include_directories(${Qt6Gui_PRIVATE_INCLUDE_DIRS})
 # 添加主函数入口
 set(MAIN_SOURCE main.cpp
         src/Utils/Utils.cpp
         src/Utils/Utils.h
         src/FluentTabWidget/FluentTabWidget.cpp
-        src/FluentTabWidget/FluentTabWidget.h)
+        src/FluentTabWidget/FluentTabWidget.h
+        )
 
+    qt_add_executable(
+            ${PROJECT_NAME}
+            ${MAIN_SOURCE}
+            ${SOURCE_FILES}
+            ${RESOURCE_FILES}
+    )
 # 创建可执行文件（会自动处理 .ui/.qrc）
-qt_add_executable(
-        ${PROJECT_NAME}
-        ${MAIN_SOURCE}
-        ${SOURCE_FILES}
-        ${RESOURCE_FILES}
-)
+if (APPLE AND ${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    set_target_properties(ClassTopLand PROPERTIES
+            MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
+            MACOSX_BUNDLE_GUI_IDENTIFIER com.aero8m.classtopland
+            MACOSX_BUNDLE_BUNDLE_NAME "ClassTopLand"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "7.0"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "7.0.0"
+            MACOSX_BUNDLE_COPYRIGHT "OpenSource By GPL"
+            MACOSX_BUNDLE_ICON_FILE app.icns
+    )
+    target_sources(ClassTopLand PRIVATE
+            app.icns
+    )
+
+    set_source_files_properties(app.icns PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources"
+    )
+endif()
 if (UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
     target_include_directories(ClassTopLand PRIVATE ${X11_INCLUDE_DIR})

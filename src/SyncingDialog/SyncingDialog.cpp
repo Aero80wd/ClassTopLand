@@ -44,7 +44,7 @@ void SyncingDialog::syncRemoteJson()
         qDebug() << json;
         QJsonDocument doc;
         doc.setObject(json);
-        QFile file(QDir::currentPath() + "/tables.json");
+        QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
         if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             showLog("JsonOpen Error!",ERR);
             return;
@@ -64,7 +64,7 @@ void SyncingDialog::syncRemoteJson()
 }
 void SyncingDialog::readConfig()
 {
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
     QTextStream stream(&file);

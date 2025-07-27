@@ -125,7 +125,7 @@ void DayTimerWidget::reload_timer() {
     ui->label_6->setText(TimeJson["english"].toString().replace("()", QString::number(retime)).replace("$",dw_e));
 }
 void DayTimerWidget::readTimeJson() {
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
     QTextStream stream(&file);

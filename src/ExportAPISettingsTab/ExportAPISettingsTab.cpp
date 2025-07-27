@@ -67,7 +67,7 @@ void ExportAPISettingsTab::SyncExAPITable() {
 				QMessageBox::critical(this, "错误", "请求失败！");
 				return;
 			}
-			QFile file(QDir::currentPath() + "/tables.json");
+			QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
 			if (file.open(QIODevice::WriteOnly)) {
 				file.write(reply_string.toUtf8());
 				file.close();

@@ -123,7 +123,7 @@ void MainWindow::newTodo(QString name,bool n){
     todos.append(todoText);
     if (n){
         Config["todos"] = todos;
-        QFile config_file(QDir::currentPath() + "/config.json");
+        QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
         config_file.open(QFile::WriteOnly);
         QJsonDocument temp_doc;
         temp_doc.setObject(Config);
@@ -160,7 +160,7 @@ void MainWindow::newTodo(QString name,bool n){
         todos = temparray;
 
         Config["todos"] = temparray;
-        QFile config_file(QDir::currentPath() + "/config.json");
+        QFile config_file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
         config_file.open(QFile::WriteOnly);
         QJsonDocument temp_doc;
         temp_doc.setObject(Config);
@@ -177,13 +177,13 @@ void MainWindow::newTodo(QString name,bool n){
     item->setSizeHint(itemWidget->size());
 }
 void MainWindow::readTodos(){
-    QFileInfo fi(QDir::currentPath() + "/config.json");
+    QFileInfo fi(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     if (!fi.isFile()){
-        QFile file(QDir::currentPath() + "/config.json");
+        QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
         file.open(QIODevice::ReadWrite | QIODevice::Text);
         file.close();
     }else{
-        QFile file(QDir::currentPath() + "/config.json");
+        QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
         file.open(QIODevice::ReadWrite | QIODevice::Text);
 
         QTextStream stream(&file);
@@ -214,7 +214,7 @@ void MainWindow::on_btnhk_clicked()
     en_cnday["星期三"] = "Wed";
     en_cnday["星期四"] = "Thu";
     en_cnday["星期五"] = "Fri";
-    QFile file(QDir::currentPath() + "/tables.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
     QTextStream stream(&file);
     QString file_str = stream.readAll();

@@ -38,7 +38,7 @@ public:
     }
     void paintEvent(QPaintEvent *event) override;
     QString getToken();
-    QString CONFIG_JSON = QDir::currentPath() + "/config.json";
+    QString CONFIG_JSON = QDir::homePath() + "/ClassTopLand_Data" + "/config.json";
 
     QPropertyAnimation* back_show;
     QPropertyAnimation* ani_opty;

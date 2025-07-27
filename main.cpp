@@ -13,12 +13,13 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1600)    
 # pragma execution_character_set("utf-8")    
 #endif
+
 #include"./src/AppLog/AppLog.h"
 #include"./src/NetworkRequests/NetworkRequests.h"
 #include"./src/SyncingDialog/SyncingDialog.h"
 #include "./src/Utils/Utils.h"
 bool ToolBoxisOpen(){
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
     QTextStream stream(&file);
@@ -45,7 +46,7 @@ bool ToolBoxisOpen(){
     return true;
 }
 bool TimerisOpen(){
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
     QTextStream stream(&file);
@@ -72,7 +73,7 @@ bool TimerisOpen(){
     return true;
 }
 bool SyncisOpen(){
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
     QTextStream stream(&file);
@@ -107,6 +108,12 @@ void printLogo() {
     std::cout << file_str.toStdString() << std::endl;
     std::cout << "---------------------------------------------------------------------------" << std::endl;
 }
+void CreateFolder(const QString &folderPath) {
+    QDir dir(folderPath);
+    if (!dir.exists()) {
+        dir.mkdir(folderPath);
+    }
+}
 int main(int argc, char *argv[])
 {
 #ifdef __linux__
@@ -128,7 +135,7 @@ int main(int argc, char *argv[])
 #endif
     //QApplication::setAttribute(Qt::AA_SetPlatformPlugin, QVariant("xcb"));
     printLogo();
-
+    CreateFolder(QDir::homePath() + "/ClassTopLand_Data");
     a.setApplicationDisplayName("ClassTopLand");
     a.setStyleSheet(getStyleSheet(":/qss/global.qss"));
     QApplication::setQuitOnLastWindowClosed(false);
@@ -173,6 +180,7 @@ int main(int argc, char *argv[])
     int scr_w = scr->size().width();
     int scr_h = scr->size().height();
     w->move((scr_w - w->width()) / 2, 0);
+
     ToolBox *tb = new ToolBox();
     tb->move((scr_w - tb->width()) * 0.9975, (scr_h - tb->height()) / 2*0.9);
     if (ToolBoxisOpen()){

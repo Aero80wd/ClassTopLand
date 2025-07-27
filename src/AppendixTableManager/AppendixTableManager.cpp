@@ -26,7 +26,7 @@ void AppendixTableManager::initSignal() {
 }
 void AppendixTableManager::readAppendixTables() {
     ui->list_appendTable->clear();
-    QFile file(QDir::currentPath() + "/tables.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
 
@@ -92,7 +92,7 @@ void AppendixTableManager::deleteAppendTables(QListWidgetItem *item) {
 }
 
 void AppendixTableManager::writeAppendixTables() {
-    QFile file(QDir::currentPath() + "/tables.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     qDebug () << file.open(QIODevice::ReadOnly | QIODevice::Text);
 
     QTextStream stream(&file);
@@ -106,7 +106,7 @@ void AppendixTableManager::writeAppendixTables() {
     }
     QJsonObject all_tables = jsondoc.object();
     all_tables["appendixTables"] = appendixTables;
-    QFile file_2(QDir::currentPath() + "/tables.json");
+    QFile file_2(QDir::homePath() + "/ClassTopLand_Data" + "/tables.json");
     file_2.open(QIODevice::Truncate | QIODevice::WriteOnly);
     QJsonDocument write_doc;
     write_doc.setObject(all_tables);

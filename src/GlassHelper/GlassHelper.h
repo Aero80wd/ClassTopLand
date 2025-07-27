@@ -17,6 +17,7 @@ public:
     static void enableBlurBehindWin32(QWidget* widget,int alpha);
 #endif
 
+
 };
 
 #endif // GLASSHELPER_H

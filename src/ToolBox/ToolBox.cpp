@@ -13,7 +13,7 @@ ToolBox::ToolBox(QWidget *parent)
     this->setAcceptDrops(true);
     this->installEventFilter(this);
     GlassHelper::enableBlurBehind(this,0x11000000);
-    QFile file(QDir::currentPath() + "/config.json");
+    QFile file(QDir::homePath() + "/ClassTopLand_Data" + "/config.json");
     file.open(QIODevice::ReadWrite | QIODevice::Text);
 
     QTextStream stream(&file);
@@ -46,9 +46,9 @@ void ToolBox::LoadPlugins(){
     for (auto x:findChildren<ClickLabel*>()){
         delete x;
     }
-    QDir plugin_dir(QDir::currentPath() + "/plugins");
+    QDir plugin_dir(QDir::homePath() + "/ClassTopLand_Data" + "/plugins");
     if (!plugin_dir.exists()){
-        plugin_dir.mkdir(QDir::currentPath() + "/plugins");
+        plugin_dir.mkdir(QDir::homePath() + "/ClassTopLand_Data" + "/plugins");
         return;
     }
     QFileInfoList fileList = plugin_dir.entryInfoList();
