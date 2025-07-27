@@ -6,7 +6,7 @@
   ClassTopLand
 </h1>
 <p align="center">
-  基于Qt6 Widgets的校园桌面课程显示组件 For Linux
+  基于Qt6 Widgets的校园桌面课程显示组件
 </p>
 
 <p align="center">
