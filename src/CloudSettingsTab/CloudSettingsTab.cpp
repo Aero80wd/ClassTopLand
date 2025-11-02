@@ -69,8 +69,10 @@ void CloudSettingsTab::readConfig()
     QString file_str = stream.readAll();
     QJsonParseError jsonError;
     QJsonDocument jsondoc = QJsonDocument::fromJson(file_str.toUtf8(), &jsonError);
+
     if (jsonError.error != QJsonParseError::NoError) {
         showLog("Config.json is Error!", LogStatus::ERR);
+        initUi();
         return; // 添加返回语句以避免后续代码执行
     }
     Config = jsondoc.object();

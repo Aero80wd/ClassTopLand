@@ -135,6 +135,7 @@ int main(int argc, char *argv[])
 #endif
     //QApplication::setAttribute(Qt::AA_SetPlatformPlugin, QVariant("xcb"));
     printLogo();
+
     CreateFolder(QDir::homePath() + "/ClassTopLand_Data");
     a.setApplicationDisplayName("ClassTopLand");
     a.setStyleSheet(getStyleSheet(":/qss/global.qss"));

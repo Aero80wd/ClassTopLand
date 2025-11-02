@@ -34,7 +34,7 @@
 #include "../NetworkRequests/NetworkRequests.h"
 #include "../AppendixTableManager/AppendixTableManager.h"
 #include "../CloudSettingsTab/CloudSettingsTab.h"
-#define APP_VERSION QString("7.0")
+#define APP_VERSION QString("7.1")
 namespace Ui {
 class TableEditWidget;
 }

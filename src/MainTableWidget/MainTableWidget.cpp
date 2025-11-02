@@ -147,7 +147,7 @@ void MainTableWidget::initAnimation()
     timer_animation->setEndValue(QPoint(width()-ui->timer_show->width(),0));
 }
 void MainTableWidget::initUi(){
-    setWindowFlags(Qt::WindowType::FramelessWindowHint | Qt::WindowType::WindowStaysOnTopHint);
+    setWindowFlags(Qt::WindowType::FramelessWindowHint | Qt::WindowType::WindowStaysOnTopHint | Qt::WindowType::Tool);
     setAttribute(Qt::WidgetAttribute::WA_TranslucentBackground);
     
 
