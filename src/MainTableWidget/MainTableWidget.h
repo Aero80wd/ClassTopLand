@@ -33,6 +33,9 @@
 #include<QTimerEvent>
 
 #include"../GlassHelper/GlassHelper.h"
+#ifdef WIN32
+#include<qt_windows.h>
+#endif
 QT_BEGIN_NAMESPACE
 
 namespace Ui {
@@ -149,6 +152,7 @@ private:
     int timer_id;
     qint64 min_time=0;
     qint64 sec_time=0;
+    QTimer* topTimer;
     void timerEvent(QTimerEvent *event);
     
 };

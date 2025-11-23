@@ -113,7 +113,6 @@ int scr_h = scr->size().height();
                 PluginWebEngine* web_window = new PluginWebEngine();
                 web_window->setWindowTitle(PluginObject["name"].toString());
                 web_window->setUrl(QUrl(PluginObject["url"].toString()));
-                
                 web_window->page()->profile()->setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0");
                 web_window->show();
             });

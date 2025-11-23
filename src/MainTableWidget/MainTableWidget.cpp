@@ -16,7 +16,17 @@ MainTableWidget::MainTableWidget(QWidget *parent)
 
     initUi();
     rtt = new refechTableThread();
-
+    topTimer = new QTimer();
+#ifdef WIN32
+    connect(topTimer, &QTimer::timeout, this, [=]
+    {
+        if (GetForegroundWindow() != HWND(winId()))
+        {
+            SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+    });
+    topTimer->start(100);
+#endif
     initSignal();
 
     rtt->start();
@@ -204,6 +214,7 @@ void MainTableWidget::initSignal(){
         class_label->setFixedSize(49,49);
         QFont font("Microsoft YaHei UI",16);
         class_label->setFont(font);
+        class_label->setStyleSheet("color: black;");
         class_label->setAlignment(Qt::AlignCenter);
 
     },Qt::QueuedConnection);
@@ -334,15 +345,14 @@ void refechTableThread::run(){
     QJsonObject null_class = { {"start","00:00"},{"end","00:00"} };
     for(int idx = 0;idx < today_table.count();)
     {
+        // QStringList topprocess = { "希沃白板"};
+        // for (QString process : topprocess) {
+        //     if (WhetherProcessRunning(process)) {
+        //         emit windowTop();
+        //     }
+        // }
+        
 
-        QStringList topprocess = { "希沃白板"};
-        for (QString process : topprocess) {
-            if (WhetherProcessRunning(process)) {
-                emit windowTop();
-            }
-        }
-        
-        
         QDateTime current_date_time = QDateTime::currentDateTime();
         QJsonObject current_class = today_table[idx].toObject();
         QJsonObject prev_class = idx > 0 ? today_table[idx - 1].toObject() : null_class;
@@ -354,8 +364,8 @@ void refechTableThread::run(){
         QDateTime next_class_start_time = getTodayTime(next_class.value("start").toString());
         QDateTime next_class_end_time = getTodayTime(next_class.value("end").toString());
         if (current_date_time.secsTo(current_class_end_time)> 0) { // 当前时间 - 当前课程下课时间 >= 0 (上课中)
-            if (idx > 0) emit setClassStyleSheet(idx - 1, ""); //去除上一节课的边框
-            emit setClassStyleSheet(idx, "border-width: 0px 0px 4px 0px; border-color:#1191d3; border-style: solid;");
+            if (idx > 0) emit setClassStyleSheet(idx - 1, "color: black;"); //去除上一节课的边框
+            emit setClassStyleSheet(idx, "border-width: 0px 0px 4px 0px; border-color:#1191d3; border-style: solid; color: black;");
             if (current_date_time.secsTo(current_class_start_time) == 0 and !shangkelema) {  // 当前时间 - 当前课程开始时间 == 0 (刚开始上课)
                 shangkelema = true;
                 if (canShow(QString("%1 已经上课，请做好上课准备").arg(current_class["name"].toString()))) {
@@ -377,13 +387,13 @@ void refechTableThread::run(){
                 int sec = diff_time % 60;
                 QString display_string = QString("%1:%2:%3").arg(hour, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')).arg(sec, 2, 10, QLatin1Char('0'));
                 emit tst(display_string);
-                sleep(50);
+                msleep(50);
             }
         }
         else if (current_date_time.secsTo(current_class_end_time) <= 0) { // 当前时间 - 当前课程下课时间 <= 0 (下课 or 不是这节课)
             if (current_date_time.secsTo(next_class_start_time)> 0) { // 当前时间 - 下一节课开始时间 >= 0 (就是这节课，且正在下课时间)
-                emit setClassStyleSheet(idx, ""); //去除上一节课的边框
-                emit setClassStyleSheet(idx + 1, "border-width: 0px 0px 4px 0px; border-color:rgb(0,226,142); border-style: solid;");
+                emit setClassStyleSheet(idx, "color: black;"); //去除上一节课的边框
+                emit setClassStyleSheet(idx + 1, "border-width: 0px 0px 4px 0px; border-color:rgb(0,226,142); border-style: solid; color: black;");
                 if (current_date_time.secsTo(current_class_end_time) == 0 and shangkelema) {
                     shangkelema = false;
                     
@@ -415,7 +425,7 @@ void refechTableThread::run(){
                         emit showStatusMessage(QString("即将上课"));
                     }
                 }
-                sleep(50);
+                msleep(50);
                 continue;
             }
             idx++; //下一节课

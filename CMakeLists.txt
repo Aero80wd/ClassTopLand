@@ -53,7 +53,7 @@ set(MAIN_SOURCE main.cpp
 # 创建可执行文件（会自动处理 .ui/.qrc）
 
 set_target_properties(ClassTopLand PROPERTIES
-        WIN32_EXECUTABLE TRUE
+        #WIN32_EXECUTABLE TRUE
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
         MACOSX_BUNDLE_GUI_IDENTIFIER com.aero8m.classtopland
