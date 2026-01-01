@@ -2,7 +2,96 @@
 #include "ui_MainTableWidget.h"
 
 #include "../API.h"
+#ifdef WIN32
+// 判断一个窗口是否“可能遮挡”透明窗口（即不透明且可见）
+static bool isWindowLikelyOpaque(HWND hwnd)
+{
+    if (!IsWindowVisible(hwnd) || IsIconic(hwnd))
+        return false;
 
+    // 获取扩展样式
+    LONG_PTR exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+
+    // 分层窗口（如透明窗口）通常不会完全遮挡
+    if (exStyle & WS_EX_LAYERED)
+        return false;
+
+    // 获取窗口类名，排除系统窗口
+    wchar_t className[64] = {};
+    GetClassNameW(hwnd, className, 64);
+
+    // 已知的系统置顶窗口，不遮挡内容
+    static const std::array<const wchar_t*, 5> ignoreClasses = {
+        L"Shell_TrayWnd",     // 任务栏
+        L"Start",             // 开始菜单 (Win10/11)
+        L"NotifyIconOverflowWindow", // 通知区域溢出
+        L"Windows.UI.Core.CoreWindow", // UWP 应用（部分）
+        L"WorkerW"            // 桌面窗口（壁纸层）
+    };
+
+    for (const auto& cls : ignoreClasses) {
+        if (wcscmp(className, cls) == 0)
+            return false;
+    }
+
+    // 默认认为是不透明窗口（如记事本、浏览器、普通 Qt 窗口等）
+    return true;
+}
+
+// 判断：我的透明置顶窗口是否被其他置顶窗口遮挡？
+bool isMyTopmostWindowCoveredByOthers(QWidget* myWidget)
+{
+    if (!myWidget || !myWidget->windowHandle()) {
+        return true; // 无效窗口，视为被遮挡
+    }
+
+    HWND myHwnd = reinterpret_cast<HWND>(myWidget->winId());
+    if (!IsWindow(myHwnd)) {
+        return true;
+    }
+
+    // 确保自己确实是 TOPMOST（否则逻辑不成立）
+    LONG_PTR myExStyle = GetWindowLongPtr(myHwnd, GWL_EXSTYLE);
+    if (!(myExStyle & WS_EX_TOPMOST)) {
+        // 你没设 Qt::WindowStaysOnTopHint！
+        return true;
+    }
+
+    // 从 Z-order 最顶端开始遍历
+    HWND hwnd = GetTopWindow(NULL);
+    while (hwnd)
+    {
+        // 检查是否是顶层窗口（非子窗口）
+        if (GetAncestor(hwnd, GA_PARENT) == GetDesktopWindow())
+        {
+            LONG_PTR exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+            if (exStyle & WS_EX_TOPMOST)
+            {
+                // 如果遍历到了自己，说明前面没有遮挡者 → ✅ 未被遮挡
+                if (hwnd == myHwnd) {
+                    return false;
+                }
+
+                // 如果在自己之前遇到了一个不透明的置顶窗口 → ❌ 被遮挡
+                if (isWindowLikelyOpaque(hwnd)) {
+                    return true;
+                }
+            }
+            else
+            {
+                // 遇到第一个非 TOPMOST 窗口，说明 TOPMOST 区域结束
+                // 而你还没出现？那说明你不在置顶队列（异常情况）
+                break;
+            }
+        }
+
+        hwnd = GetWindow(hwnd, GW_HWNDNEXT);
+    }
+
+    // 正常情况不应走到这里（说明没找到自己）
+    return true;
+}
+#endif
 MainTableWidget::MainTableWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainTableWidget)
@@ -20,7 +109,7 @@ MainTableWidget::MainTableWidget(QWidget *parent)
 #ifdef WIN32
     connect(topTimer, &QTimer::timeout, this, [=]
     {
-        if (GetForegroundWindow() != HWND(winId()))
+        if (!isMyTopmostWindowCoveredByOthers(this))
         {
             SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
         }
@@ -121,10 +210,16 @@ void MainTableWidget::showStatus(QString str)
 {
     showLog("ShowStatused!",INFO);
     ui->label_3->setText(str);
+    status_msg_animation->setEasingCurve(QEasingCurve::OutBack);
+    status_msg_animation->setStartValue(QRect(width()/2,-78,49,49));
+    status_msg_animation->setEndValue(QRect(0,0,width(),49));
     status_msg_animation->setDirection(QAbstractAnimation::Forward);
     status_msg_animation->start();
     QTimer::singleShot(5000,this,[&]()
     {
+        status_msg_animation->setEasingCurve(QEasingCurve::InOutSine);
+        status_msg_animation->setStartValue(QRect(width()/2,-78,49,49));
+        status_msg_animation->setEndValue(QRect(0,0,width(),49));
         status_msg_animation->setDirection(QAbstractAnimation::Backward);
         status_msg_animation->start();
     });
@@ -143,6 +238,12 @@ void MainTableWidget::initAnimation()
     move((scr_w - width()) / 2, 0);
     move((scr_w - width()) / 2, 0);
     ui->timer_show->move(width() + ui->timer_show->width(),0);
+    // 信息显示动画
+    status_msg_animation = new QPropertyAnimation(ui->status_show,"geometry");
+    status_msg_animation->setDuration(500);
+    status_msg_animation->setEasingCurve(QEasingCurve::OutBack);
+    status_msg_animation->setStartValue(QRect(width()/2,-78,49,49));
+    status_msg_animation->setEndValue(QRect(0,0,width(),49));
     // 窗口隐藏/显示动画
     hide_animation = new QPropertyAnimation(this,"pos");
     hide_animation->setDuration(500);
@@ -157,16 +258,13 @@ void MainTableWidget::initAnimation()
     timer_animation->setEndValue(QPoint(width()-ui->timer_show->width(),0));
 }
 void MainTableWidget::initUi(){
-    setWindowFlags(Qt::WindowType::FramelessWindowHint | Qt::WindowType::WindowStaysOnTopHint | Qt::WindowType::Tool);
-    setAttribute(Qt::WidgetAttribute::WA_TranslucentBackground);
+    setWindowFlags(Qt::WindowType::FramelessWindowHint | Qt::WindowType::WindowStaysOnTopHint | Qt::WindowType::Tool | Qt::WindowDoesNotAcceptFocus);
+    setAttribute(Qt::WidgetAttribute::WA_TranslucentBackground,true);
+    setAttribute(Qt::WidgetAttribute::WA_ShowWithoutActivating,true);
     
 
     GlassHelper::enableBlurBehind(this);
-    status_msg_animation = new QPropertyAnimation(ui->status_show,"pos");
-    status_msg_animation->setDuration(500);
-    status_msg_animation->setEasingCurve(QEasingCurve::InOutSine);
-    status_msg_animation->setStartValue(QPoint(0,-49));
-    status_msg_animation->setEndValue(QPoint(0,0));
+
     class_show_widget_layout = new QHBoxLayout();
     class_show_widget_layout->setContentsMargins(0,0,0,0);
     class_show_widget_layout->setSpacing(0);
@@ -239,7 +337,11 @@ void MainTableWidget::initSignal(){
     connect(this,&MainTableWidget::showTimer,this,&MainTableWidget::on_showTimer,Qt::QueuedConnection);
     connect(rtt, &refechTableThread::windowTop, this, [=] {
         // SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-            qDebug() << "";
+            // if (IsWindowFullyCovered(HWND(winId())))
+            // {
+            //     qDebug() << "up";
+            //     SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+            // }
     }, Qt::QueuedConnection);
     connect(rtt, &refechTableThread::getWidth, this,&MainTableWidget::on_getWidth, Qt::BlockingQueuedConnection);
 
@@ -345,12 +447,7 @@ void refechTableThread::run(){
     QJsonObject null_class = { {"start","00:00"},{"end","00:00"} };
     for(int idx = 0;idx < today_table.count();)
     {
-        // QStringList topprocess = { "希沃白板"};
-        // for (QString process : topprocess) {
-        //     if (WhetherProcessRunning(process)) {
-        //         emit windowTop();
-        //     }
-        // }
+        // emit windowTop();
         
 
         QDateTime current_date_time = QDateTime::currentDateTime();
