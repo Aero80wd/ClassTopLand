@@ -6,13 +6,16 @@ set(CMAKE_AUTOMOC ON)         # 自动调用 moc
 set(CMAKE_AUTORCC ON)         # 自动调用 rcc
 set(CMAKE_AUTOUIC ON)         # 自动调用 uic
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(NIGHTLY_RELEASE ON)
 # 设置 Qt 的查找路径（可选）
 if (UNIX AND NOT APPLE)
     set(CMAKE_PREFIX_PATH "/home/jiahang/Qt/6.7.3/gcc_64/lib/cmake/")
-elseif(WIN32)
+elseif(WIN32 AND NOT NIGHTLY_RELEASE)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.9.3/msvc2022_64/lib/cmake")
 elseif(APPLE)
     set(CMAKE_PREFIX_PATH "/Users/jiahang/Qt/6.7.3/macos/lib/cmake/")
+elseif(NIGHTLY_RELEASE)
+    set(CMAKE_PREFIX_PATH "C:/Qt/6.7.3/msvc2022_64/lib/cmake")
 endif()
 
 if (UNIX AND NOT APPLE)
@@ -25,9 +28,9 @@ find_package(Qt6 COMPONENTS
         Gui
         Widgets
         Network
-WebEngineWidgets
-Test
-REQUIRED
+        WebEngineWidgets
+        Test
+        REQUIRED
 )
 
 # 收集 src 及其子目录中的源文件
@@ -44,16 +47,16 @@ set(MAIN_SOURCE main.cpp
         resource.rc
 )
 
-    qt_add_executable(
-            ${PROJECT_NAME}
-            ${MAIN_SOURCE}
-            ${SOURCE_FILES}
-            ${RESOURCE_FILES}
-    )
+qt_add_executable(
+        ${PROJECT_NAME}
+        ${MAIN_SOURCE}
+        ${SOURCE_FILES}
+        ${RESOURCE_FILES}
+)
 # 创建可执行文件（会自动处理 .ui/.qrc）
 
 set_target_properties(ClassTopLand PROPERTIES
-        #WIN32_EXECUTABLE TRUE
+        WIN32_EXECUTABLE TRUE
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
         MACOSX_BUNDLE_GUI_IDENTIFIER com.aero8m.classtopland

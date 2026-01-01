@@ -35,6 +35,8 @@
 #include"../GlassHelper/GlassHelper.h"
 #ifdef WIN32
 #include<qt_windows.h>
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
 #endif
 QT_BEGIN_NAMESPACE
 
