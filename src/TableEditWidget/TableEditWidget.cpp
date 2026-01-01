@@ -73,7 +73,7 @@ TableEditWidget::TableEditWidget(QWidget *parent)
     ui->pluginList->setAcceptDrops(true);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->installEventFilter(this);
-    ui->label_4->setText("Nightly Build commit " + QString(APP_VERSION));
+    ui->label_4->setText("Version " + APP_VERSION);
     connect(ui->tableWidget, &QTableWidget::cellChanged, this, &TableEditWidget::on_cellChanged);
     ui->tabWidget->setTabPosition(QTabWidget::West);
     //ui->tabWidget->tabBar()->setStyle(new CustomTabStyle);
