@@ -5,10 +5,11 @@
   <h1 align="center">
   ClassTopLand
 </h1>
+<h3 style="text-align: center">注意：新发行版采用自动构建，请前往 安装 部分的链接下载！</h3>
+
 <p align="center">
   基于Qt6 Widgets的校园桌面课程显示组件
 </p>
-
 <p align="center">
     <img src="https://img.shields.io/badge/Version-v1.0-2334D05" alt="Version">
 
@@ -22,7 +23,7 @@
   </a>
 </p>
 
-<img src="https://disk.aero8m.cloud/p/共享图床/classtopland.png" alt="example">
+
 
 
 
@@ -37,12 +38,16 @@
 
 
 ## 安装
-1. 下载<a href="https://gitee.com/Aero80wd/SchoolTools/releases">Release</a>内的安装包，根据安装包提示进行安装。
+1. 下载<a href="https://autobuild.aero8m.cn/ClassTopLand">https://autobuild.aero8m.cn/ClassTopLand</a>内的安装包，根据安装包提示进行安装。
+> **提示**<br/>
+> 最上面的安装包通常是最新版本，列表按时间倒序排序！
+
 2. 打开程序后根据提示进行设置。
 3. 开始使用。
 > **注意**
 > 如运行出现缺失DLL，请下载安装[VS2019运行库](https://aka.ms/vs/17/release/vc_redist.x64.exe)。
 ## 更新日志
+### 新更新日志请查看提交记录！
 ### [v7.0] - 2025-7-27
 - 更改设置UI
 - 更改软件存储位置为用户主目录下的ClassTopLand_Data目录

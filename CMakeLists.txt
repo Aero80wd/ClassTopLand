@@ -35,7 +35,7 @@ find_package(Qt6 COMPONENTS
 
 # 收集 src 及其子目录中的源文件
 file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.h" "src/*.ui")
-set(RESOURCE_FILES res.qrc)
+set(RESOURCE_FILES res.qrc resource.rc)
 
 include_directories(${Qt6Gui_PRIVATE_INCLUDE_DIRS})
 # 添加主函数入口
@@ -44,7 +44,7 @@ set(MAIN_SOURCE main.cpp
         src/Utils/Utils.h
         src/FluentTabWidget/FluentTabWidget.cpp
         src/FluentTabWidget/FluentTabWidget.h
-        resource.rc
+        src/VERSION.h
 )
 
 qt_add_executable(
@@ -61,8 +61,8 @@ set_target_properties(ClassTopLand PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
         MACOSX_BUNDLE_GUI_IDENTIFIER com.aero8m.classtopland
         MACOSX_BUNDLE_BUNDLE_NAME "ClassTopLand"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "7.0"
-        MACOSX_BUNDLE_LONG_VERSION_STRING "7.0.0"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "NightlyBuild"
+        MACOSX_BUNDLE_LONG_VERSION_STRING "NightlyBuild"
         MACOSX_BUNDLE_COPYRIGHT "OpenSource By GPL"
         MACOSX_BUNDLE_ICON_FILE app.icns
 )

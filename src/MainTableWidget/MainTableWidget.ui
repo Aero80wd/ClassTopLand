@@ -160,7 +160,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">background: rgba(200,200,200,0.5);
-border:none;</string>
+     border:none;</string>
    </property>
    <property name="text">
     <string/>
@@ -221,28 +221,6 @@ border:none;</string>
     </item>
    </layout>
   </widget>
-  <widget class="QFrame" name="frame">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>531</width>
-     <height>49</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">
-background-color:rgba(240,240,240,0.1)
-</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Shape::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Shadow::Raised</enum>
-   </property>
-  </widget>
-  <zorder>frame</zorder>
   <zorder>stackedWidget</zorder>
   <zorder>hide_window</zorder>
   <zorder>status_show</zorder>

@@ -962,7 +962,10 @@ background:rgb(11, 96, 139);
        <item>
         <widget class="QLabel" name="label_13">
          <property name="text">
-          <string>本应用由雨云提供计算服务</string>
+          <string>注意：本应用现采用自动编译模式，会有不稳定现象，有bug请等待修复
+本应用由雨云提供计算服务
+
+</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>

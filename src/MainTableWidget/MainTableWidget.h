@@ -93,6 +93,7 @@ public:
     void createActions();
     void createMenu();
     void setStyleSheetFromFile(QWidget* widget,QString file);
+    void showWindow(int scr_w, int scr_h);
     TableEditWidget *EditWindow;
     QMenu *tray_menu;
     QAction *m_showedit;
@@ -107,6 +108,7 @@ public:
     QPropertyAnimation* status_msg_animation;
     QPropertyAnimation* hide_animation;
     QPropertyAnimation* timer_animation;
+    QPropertyAnimation* window_show_animation;
     QAction* m_showmain;
     QJsonObject Config;
     bool ishide = false;
@@ -156,6 +158,9 @@ private:
     qint64 sec_time=0;
     QTimer* topTimer;
     void timerEvent(QTimerEvent *event);
+    int scr_w;
+    int scr_h;
+
     
 };
 

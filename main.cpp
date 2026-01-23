@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
         syncDialog->syncRemoteJson();
     }
     MainTableWidget *w = new MainTableWidget();
-    w->show();
+
 
 #ifdef __linux__
     QScreen *screen = QApplication::primaryScreen();
@@ -180,8 +180,8 @@ int main(int argc, char *argv[])
     QScreen *scr = a.primaryScreen();
     int scr_w = scr->size().width();
     int scr_h = scr->size().height();
-    w->move((scr_w - w->width()) / 2, 0);
-
+    // w->move((scr_w - w->width()) / 2, 0);
+    w->showWindow(scr_w, scr_h);
     ToolBox *tb = new ToolBox();
     tb->move((scr_w - tb->width()) * 0.9975, (scr_h - tb->height()) / 2*0.9);
     if (ToolBoxisOpen()){
